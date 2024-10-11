@@ -5,9 +5,23 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../screens/home/Home';
 import Todo from '../screens/todo/Todo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import useTodos from '../hooks/useTodos';
 const Stack = createNativeStackNavigator();
 
 const Routes = () => {
+  const {setTodo}: any = useTodos();
+  const asyncData = async () => {
+    let asyncTodo: any = await AsyncStorage.getItem('todo');
+    let json = JSON.parse(asyncTodo);
+    setTodo(json);
+    console.log('json---------------', json);
+  };
+  React.useEffect(() => {
+    asyncData();
+    // AsyncStorage.clear();
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">

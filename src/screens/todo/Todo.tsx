@@ -14,6 +14,7 @@ import {faPenToSquare, faTrashCan} from '@fortawesome/free-regular-svg-icons';
 import {faCirclePlus} from '@fortawesome/free-solid-svg-icons';
 import useTodos from '../../hooks/useTodos';
 import ModalComponent from '../../components/Modal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // axios.defaults.baseURL = 'http://localhost:8000';
 
 // let editedTask: any = {
@@ -40,7 +41,7 @@ const Todo = () => {
   }, [data]);
 
   let todoId = data?.length - 1;
-  let newId = data[todoId]?.id + 1;
+  let newId = data && data[todoId]?.id + 1;
 
   let newTask: any = {
     id: newId ? newId : 1,
@@ -53,10 +54,21 @@ const Todo = () => {
     setIsAddModal(true);
   };
 
+  // const asyncData = async () => {
+  //   let asyncTodo: any = AsyncStorage.getItem('todo');
+  //   let json = JSON.parse(asyncTodo);
+  //   console.log('json---------------', json);
+  // };
+
+
+  // useEffect(() => {
+  //   asyncData();
+  // }, []);
+
   const createTask = () => {
+    console.log("New Task : ", newTask);
     createTodo(newTask);
     setIsAddModal(false);
-    console.log('Created Task!');
   };
 
   const updateTask = () => {
@@ -131,7 +143,7 @@ const Todo = () => {
           />
         </View>
         <View style={{flex: 1, width: '100%'}}>
-          {data.length === 0 && (
+          {data?.length === 0 && (
             <View
               style={{
                 flex: 1,
