@@ -40,7 +40,7 @@ const Todo = () => {
   }, [data]);
 
   let todoId = data?.length - 1;
-  let newId = data[todoId]?.id + 1;
+  let newId = data && data[todoId]?.id + 1;
 
   let newTask: any = {
     id: newId ? newId : 1,
@@ -131,7 +131,7 @@ const Todo = () => {
           />
         </View>
         <View style={{flex: 1, width: '100%'}}>
-          {data.length === 0 && (
+          {data?.length === 0 && (
             <View
               style={{
                 flex: 1,
