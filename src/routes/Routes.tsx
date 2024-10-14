@@ -5,6 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../screens/home/Home';
 import Todo from '../screens/todo/Todo';
+import ReactHookForm from '../screens/home/ReactHookForm';
 const Stack = createNativeStackNavigator();
 
 const Routes = () => {
@@ -24,6 +25,13 @@ const Routes = () => {
             ),
             headerTitleStyle: {color: 'green', fontWeight: 'condensedBold'},
             headerStyle: {backgroundColor: 'lightblue'},
+          }}
+        />
+        <Stack.Screen
+          name="Form"
+          component={ReactHookForm}
+          options={{
+            headerShown: false,
           }}
         />
         <Stack.Screen

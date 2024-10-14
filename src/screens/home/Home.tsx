@@ -9,6 +9,9 @@ const Home = ({navigation}: any) => {
       <TouchableOpacity
         onPress={() => navigation.navigate('Todo')}
       ><Text>Goto Todo</Text></TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Form')}
+      ><Text>Goto Form</Text></TouchableOpacity>
     </View>
   );
 };
