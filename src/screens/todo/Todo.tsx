@@ -52,13 +52,10 @@ const Todo = () => {
 
   const updateTask = async () => {
     setLoading(true);
-    let data: any = await axios.put(
-      `todos/${editedTask?.id}`,
-      {
-        task: editedTask.task,
-        completed: editedTask.completed,
-      },
-    );
+    let data: any = await axios.put(`todos/${editedTask?.id}`, {
+      task: editedTask.task,
+      completed: editedTask.completed,
+    });
 
     if (data) {
       console.log('Updated Task!');
@@ -68,9 +65,7 @@ const Todo = () => {
   };
 
   const removeTodo = async (item: any) => {
-    let data: any = await axios.delete(
-      `todos/${item?.id}`,
-    );
+    let data: any = await axios.delete(`todos/${item?.id}`);
     if (data) {
       console.log('Deleted!');
       callData();
@@ -103,6 +98,19 @@ const Todo = () => {
 
     if (data) {
       console.log('Data arrived');
+    }
+  };
+
+  const updateStatus = async (item: any) => {
+    let data: any = await axios.put(`todos/${item?.id}`, {
+      id: item?.id,
+      task: item?.task,
+      completed: !item?.completed,
+    });
+
+    if (data) {
+      console.log('Status Updated!');
+      callData();
     }
   };
 
@@ -228,17 +236,7 @@ const Todo = () => {
                     iconStyle={{borderColor: 'black'}}
                     innerIconStyle={{borderWidth: 1, borderColor: '#9f9f9f'}}
                     textStyle={{color: 'black'}}
-                    onPress={async isChecked => {
-                      console.log('Demo');
-
-                      setEditedTask({
-                        id: item.id,
-                        task: item.task,
-                        completed: isChecked,
-                      });
-                      await updateTask;
-                      console.log('editedTask======', editedTask);
-                    }}
+                    onPress={() => updateStatus(item)}
                   />
                 </View>
                 <View
