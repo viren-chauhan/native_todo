@@ -35,6 +35,10 @@ export const todoSlice = createSlice({
       return [...state, actions.payload]
     },
 
+    // setTodo : (state:any, actions) => {
+    //   return data = 
+    // }
+
     default: (state: any) => {
       return state;
     },

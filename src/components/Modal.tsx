@@ -11,12 +11,12 @@ import React, {useEffect, useRef, useState} from 'react';
 const ModalComponent = ({
   setIsAddModal,
   newTask,
+  setNewTask,
   createTask,
   updateTask,
   editedTask,
   setEditedTask,
-}:
-any) => {
+}: any) => {
   const [textFocus, setTextFocus] = useState<boolean>(false);
   const inputRef = useRef<any>(null);
 
@@ -28,7 +28,6 @@ any) => {
     inputRef.current.focus();
   };
 
-  // console.log('editedTaskModel', editedTask);
 
   const blurEvent = (e = null) => {
     console.log('>>> CALLED');
@@ -47,7 +46,6 @@ any) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        //   onTouchStart={() => Keyboard.dismiss()}
       >
         <View
           style={{
@@ -80,19 +78,17 @@ any) => {
                     task: e,
                     completed: editedTask.completed,
                   })
-                : (newTask.task = e);
-              // console.log('dataToEdit.task------', dataToEdit.task);
+                : setNewTask({
+                    task: e,
+                    completed: newTask.completed,
+                  });
             }}
             style={{
-              // fontWeight: 'bold',
               width: '100%',
               borderRadius: 5,
               borderBottomColor: !textFocus ? 'black' : '#4285f4',
               borderBottomWidth: 1,
             }}
-            //   disableFullscreenUI={false}
-            //   onSubmitEditing={() => Keyboard.dismiss()}
-            //   onFocus={() => setTextFocus(true)}
             onFocus={focusEvent}
             // onBlur={(e) => blurEvent(e)}
             onBlur={() => Keyboard.dismiss()}

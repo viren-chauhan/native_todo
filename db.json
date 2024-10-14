@@ -1,52 +1,9 @@
-[
+{
+  "todos": [
     {
-        "id": 1,
-        "task": "Buy groceries",
-        "completed": false
-    },
-    {
-        "id": 2,
-        "task": "Walk the dog",
-        "completed": true
-    },
-    {
-        "id": 3,
-        "task": "Finish project report",
-        "completed": false
-    },
-    {
-        "id": 4,
-        "task": "Read a book",
-        "completed": true
-    },
-    {
-        "id": 5,
-        "task": "Workout at the gym",
-        "completed": false
-    },
-    {
-        "id": 6,
-        "task": "Call Mom",
-        "completed": true
-    },
-    {
-        "id": 7,
-        "task": "Clean the house",
-        "completed": false
-    },
-    {
-        "id": 8,
-        "task": "Prepare dinner",
-        "completed": false
-    },
-    {
-        "id": 9,
-        "task": "Submit tax documents",
-        "completed": true
-    },
-    {
-        "id": 10,
-        "task": "Plan weekend trip",
-        "completed": false
+      "task": "Hello World!",
+      "completed": false,
+      "id": "6567"
     }
-]
+  ]
+}

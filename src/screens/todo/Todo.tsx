@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -14,13 +15,8 @@ import {faPenToSquare, faTrashCan} from '@fortawesome/free-regular-svg-icons';
 import {faCirclePlus} from '@fortawesome/free-solid-svg-icons';
 import useTodos from '../../hooks/useTodos';
 import ModalComponent from '../../components/Modal';
+import axios from 'axios';
 // axios.defaults.baseURL = 'http://localhost:8000';
-
-// let editedTask: any = {
-//   id: 0,
-//   task: '',
-//   completed: false,
-// };
 
 const Todo = () => {
   const [isAddModal, setIsAddModal] = useState<boolean>(false);
@@ -30,43 +26,55 @@ const Todo = () => {
     task: '',
     completed: false,
   });
-  const {data, createTodo, deleteTodo, editTodo}: any = useTodos();
-  const [allTasks, setAllTasks] = useState<any>([]);
-
-  React.useEffect(() => {
-    // setAllTasks(getAll);
-    console.log('Data--------------', data);
-    setAllTasks(data);
-  }, [data]);
-
-  let todoId = data?.length - 1;
-  let newId = data[todoId]?.id + 1;
-
-  let newTask: any = {
-    id: newId ? newId : 1,
+  const [newTask, setNewTask] = useState({
     task: '',
     completed: false,
-  };
+  });
+  const [allTasks, setAllTasks] = useState<any>([]);
+  const [isLoading, setLoading] = useState<boolean>(true);
 
   const setEditTask = (item: any) => {
     setEditedTask(item);
     setIsAddModal(true);
   };
 
-  const createTask = () => {
-    createTodo(newTask);
+  const createTask = async () => {
+    let data = await axios.post('http://10.0.2.2:3000/todos', {
+      task: newTask?.task,
+      completed: newTask.completed,
+    });
+    if (data) {
+      console.log('New Task Added!');
+      callData();
+    }
     setIsAddModal(false);
-    console.log('Created Task!');
   };
 
-  const updateTask = () => {
-    console.log('Updated Task!');
-    editTodo(editedTask);
+  const updateTask = async () => {
+    setLoading(true);
+    let data: any = await axios.put(
+      `http://10.0.2.2:3000/todos/${editedTask?.id}`,
+      {
+        task: editedTask.task,
+        completed: editedTask.completed,
+      },
+    );
+
+    if (data) {
+      console.log('Updated Task!');
+      callData();
+    }
     setIsAddModal(false);
   };
 
-  const removeTodo = (item: any) => {
-    deleteTodo(item.id);
+  const removeTodo = async (item: any) => {
+    let data: any = await axios.delete(
+      `http://10.0.2.2:3000/todos/${item?.id}`,
+    );
+    if (data) {
+      console.log('Deleted!');
+      callData();
+    }
   };
 
   const onChange = (e: any) => {
@@ -76,9 +84,34 @@ const Todo = () => {
       );
       setAllTasks(todos);
     } else {
-      setAllTasks(data);
     }
   };
+
+  let callData = async () => {
+    setLoading(true);
+    let data: any = await axios
+      .get('http://10.0.2.2:3000/todos')
+      .then(resp => {
+        console.log(resp.data);
+        setAllTasks(resp.data || []);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.log('Error!---', err);
+        setLoading(false);
+      });
+
+    if (data) {
+      console.log('Data arrived');
+    }
+  };
+
+  useEffect(() => {
+    callData();
+  }, []);
+  useEffect(() => {
+    console.log('All Tasks:-------', allTasks);
+  }, [allTasks]);
 
   return (
     <SafeAreaView
@@ -131,21 +164,41 @@ const Todo = () => {
           />
         </View>
         <View style={{flex: 1, width: '100%'}}>
-          {data.length === 0 && (
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-                // backgroundColor: 'blue',
-              }}>
-              <Text style={{fontSize: 25, fontWeight: 'bold'}}>
-                Not todos added yet!
-              </Text>
-            </View>
-          )}
+          {/* Not todos added yet! For Redux */}
+          {/* {data.length === 0 && (
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              // backgroundColor: 'blue',
+            }}>
+            <Text style={{fontSize: 25, fontWeight: 'bold'}}>
+              Not todos added yet!
+            </Text>
+          </View>
+        )} */}
+
           <FlatList
-            data={allTasks ? allTasks : data}
+            data={allTasks || []}
+            ListEmptyComponent={() =>
+              isLoading ? (
+                <View>
+                  <ActivityIndicator size={'large'} color={'#8257e5'} />
+                </View>
+              ) : (
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={{fontSize: 25, fontWeight: 'bold'}}>
+                    Not todos added yet!
+                  </Text>
+                </View>
+              )
+            }
             ItemSeparatorComponent={() => <View style={{height: 12}}></View>}
             renderItem={({item}) => (
               <View
@@ -222,6 +275,7 @@ const Todo = () => {
       {isAddModal && (
         <ModalComponent
           setIsAddModal={setIsAddModal}
+          setNewTask={setNewTask}
           newTask={newTask}
           createTask={createTask}
           updateTask={updateTask}
