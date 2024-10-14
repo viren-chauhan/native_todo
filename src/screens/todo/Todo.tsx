@@ -16,7 +16,7 @@ import {faCirclePlus} from '@fortawesome/free-solid-svg-icons';
 import useTodos from '../../hooks/useTodos';
 import ModalComponent from '../../components/Modal';
 import axios from 'axios';
-// axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.baseURL = 'http://10.0.2.2:3000/';
 
 const Todo = () => {
   const [isAddModal, setIsAddModal] = useState<boolean>(false);
@@ -39,7 +39,7 @@ const Todo = () => {
   };
 
   const createTask = async () => {
-    let data = await axios.post('http://10.0.2.2:3000/todos', {
+    let data = await axios.post('todos', {
       task: newTask?.task,
       completed: newTask.completed,
     });
@@ -53,7 +53,7 @@ const Todo = () => {
   const updateTask = async () => {
     setLoading(true);
     let data: any = await axios.put(
-      `http://10.0.2.2:3000/todos/${editedTask?.id}`,
+      `todos/${editedTask?.id}`,
       {
         task: editedTask.task,
         completed: editedTask.completed,
@@ -69,7 +69,7 @@ const Todo = () => {
 
   const removeTodo = async (item: any) => {
     let data: any = await axios.delete(
-      `http://10.0.2.2:3000/todos/${item?.id}`,
+      `todos/${item?.id}`,
     );
     if (data) {
       console.log('Deleted!');
@@ -90,7 +90,7 @@ const Todo = () => {
   let callData = async () => {
     setLoading(true);
     let data: any = await axios
-      .get('http://10.0.2.2:3000/todos')
+      .get('todos')
       .then(resp => {
         console.log(resp.data);
         setAllTasks(resp.data || []);
